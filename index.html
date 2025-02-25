@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Datenbankabfrage</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="sqlite-browser/assets/index-b920f083.js" type="module"></script>
+</head>
+
+<body>
+
+    <label for="dbSelect">Wähle eine Datenbank:</label>
+    <select id="dbSelect">
+	    <option value="supertrumpf.db">Supertrumpf</option>
+        <option value="sql_mystery_de_v1.db">Mystery-Teil 1</option>
+        <option value="custom">Eigene Datei hochladen...</option>
+    </select>
+
+    <input type="file" id="fileInput" accept=".db" style="display: none;" />
+
+    <div>
+        <sqlite-browser
+            id="sqliteBrowser"
+            filetype="sqlite"
+            file_path="supertrumpf.db"
+            initial_request=""
+            app_preferences_json='{"controls_values": {"usage_guide": false,"db_schema": true,"realtime_updates": false},"controls_visibility": {"usage_guide": true,"db_schema": true,"db_download": false,"realtime_updates": false,"request_button": true},"db_schema_settings": {"show_data_type_strings": false}}'
+        />
+    </div>
+
+    <script>
+        document.getElementById('dbSelect').addEventListener('change', function () {
+            if (this.value === "custom") {
+                document.getElementById('fileInput').click();
+            } else {
+                document.getElementById('sqliteBrowser').setAttribute('file_path', this.value);
+            }
+        });
+
+        document.getElementById('fileInput').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const objectURL = URL.createObjectURL(file);
+                document.getElementById('sqliteBrowser').setAttribute('file_path', objectURL);
+            }
+        });
+    </script>
+
+</body>
+
+</html>
